@@ -23,7 +23,8 @@ defmodule AnniversaryApp.MixProject do
     [
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:csv, "~> 3.2"},
-      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:typed_struct, "~> 0.3.0"}
     ]
   end
 end
