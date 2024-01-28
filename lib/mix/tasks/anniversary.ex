@@ -37,11 +37,20 @@ defmodule Mix.Tasks.Anniversary do
 
   use Mix.Task
 
+  alias AnniversaryApp
+
   def run([input_file]), do: run([input_file, Date.utc_today()])
 
   def run([input_file, run_date]) do
     Mix.Task.run("app.start")
-    # Import file, parse, and convert to structured format
+
+    with {:ok, employees} <- AnniversaryApp.get_employees(input_file),
+         {:ok, supervisor_map} <- AnniversaryApp.order_data(employees, run_date) do
+      supervisor_map
+    else
+      {:error, errors} -> handle_errors(errors)
+    end
+
     # Sort and filter for upcoming anniversaries
     # Build and return JSON payload
     # Handle error messages with invalid input parameters
@@ -49,4 +58,19 @@ defmodule Mix.Tasks.Anniversary do
 
   def run(_args),
     do: IO.puts("Call must match pattern mix anniversary <input_file_path> <run_date>")
+
+  defp handle_errors(errors) do
+    errors
+    |> build_error()
+    |> List.to_string()
+    |> IO.puts()
+  end
+
+  defp build_error([]), do: ""
+
+  defp build_error([%{row: row, error: error} | tail]) do
+    ["Error on row #{row}: #{error}" | build_error(tail)]
+  end
+
+  defp build_error([error_message]), do: [error_message]
 end
