@@ -20,10 +20,21 @@ defmodule AnniversaryApp do
     end
   end
 
-  @doc "Orders upcoming anniversaries based on the run_date and returns a structured result"
-  @spec order_data(list(Employee.t()), Date.t()) ::
-          {:ok, map()} | {:error, list(String.t())}
-  def order_data(employees, run_date) do
-    {:ok, %{}}
+  @doc """
+  Builds a supervisor map with up to 5 of the supervisors employees with upcoming anniversaries
+  in order based on their anniversary date.
+  """
+  @spec order_data(list(Employee.t()), Date.t()) :: map()
+  def order_data(employees, %Date{} = run_date) do
+    Enum.reduce(employees, %{}, fn employee, acc ->
+      acc
+      |> Map.put_new(employee.employee_id, [])
+      |> Map.put_new(employee.supervisor_id, [])
+      |> Map.update(
+        employee.supervisor_id,
+        [],
+        &Employee.maybe_add_employee(&1, employee, run_date)
+      )
+    end)
   end
 end

@@ -39,14 +39,17 @@ defmodule Mix.Tasks.Anniversary do
 
   alias AnniversaryApp
 
-  def run([input_file]), do: run([input_file, Date.utc_today()])
+  def run([input_file]), do: run([input_file, Date.utc_today() |> Date.to_iso8601()])
 
   def run([input_file, run_date]) do
     Mix.Task.run("app.start")
 
-    with {:ok, employees} <- AnniversaryApp.get_employees(input_file),
-         {:ok, supervisor_map} <- AnniversaryApp.order_data(employees, run_date) do
-      supervisor_map
+    with {:ok, run_date} <- Date.from_iso8601(run_date),
+         {:ok, employees} <- AnniversaryApp.get_employees(input_file) do
+      employees
+      |> AnniversaryApp.order_data(run_date)
+
+      # Build JSON response
     else
       {:error, errors} -> handle_errors(errors)
     end
@@ -73,4 +76,5 @@ defmodule Mix.Tasks.Anniversary do
   end
 
   defp build_error([error_message]), do: [error_message]
+  defp build_error(error_message), do: [error_message]
 end
