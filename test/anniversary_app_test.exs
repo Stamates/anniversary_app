@@ -135,15 +135,17 @@ defmodule AnniversaryAppTest do
       assert %{
                "lconrad254" => [
                  %Employee{
+                   anniversary_date: ~D[2016-11-19],
                    employee_id: "wlee257",
                    first_name: "Winford",
-                   last_name: "Lee",
                    hire_date: ~D[1996-11-19],
+                   last_name: "Lee",
                    supervisor_id: "lconrad254"
                  }
                ],
                "ballison200" => [
                  %Employee{
+                   anniversary_date: ~D[2016-04-10],
                    employee_id: "tbriggs201",
                    first_name: "Tanya",
                    hire_date: ~D[2006-04-10],
@@ -151,6 +153,7 @@ defmodule AnniversaryAppTest do
                    supervisor_id: "ballison200"
                  },
                  %Employee{
+                   anniversary_date: ~D[2016-05-12],
                    employee_id: "cmueller163",
                    first_name: "Candra",
                    hire_date: ~D[1986-05-12],
@@ -158,6 +161,7 @@ defmodule AnniversaryAppTest do
                    supervisor_id: "ballison200"
                  },
                  %Employee{
+                   anniversary_date: ~D[2016-07-12],
                    employee_id: "restes196",
                    first_name: "Rosella",
                    hire_date: ~D[1981-07-12],
@@ -165,6 +169,7 @@ defmodule AnniversaryAppTest do
                    supervisor_id: "ballison200"
                  },
                  %Employee{
+                   anniversary_date: ~D[2016-08-11],
                    employee_id: "vstevens199",
                    first_name: "Vicenta",
                    hire_date: ~D[1991-08-11],
@@ -172,6 +177,7 @@ defmodule AnniversaryAppTest do
                    supervisor_id: "ballison200"
                  },
                  %Employee{
+                   anniversary_date: ~D[2016-09-11],
                    employee_id: "jrodriguez192",
                    first_name: "Javier",
                    hire_date: ~D[2001-09-11],
@@ -181,6 +187,7 @@ defmodule AnniversaryAppTest do
                ],
                "cbarnett198" => [
                  %Employee{
+                   anniversary_date: ~D[2016-06-12],
                    employee_id: "ballison200",
                    first_name: "Brendon",
                    hire_date: ~D[1976-06-12],
@@ -210,6 +217,7 @@ defmodule AnniversaryAppTest do
                "lconrad254" => [],
                "ballison200" => [
                  %Employee{
+                   anniversary_date: ~D[2015-04-29],
                    employee_id: "lpierce187",
                    first_name: "Lyndon",
                    last_name: "Pierce",

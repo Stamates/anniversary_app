@@ -6,6 +6,9 @@ defmodule AnniversaryApp do
 
   alias AnniversaryApp.Employee
   alias AnniversaryApp.FileImporter
+  alias AnniversaryApp.Response
+
+  @type supervisor_map :: %{String.t() => list(Employee.t())}
 
   @doc "Converts a CSV input file into a list of Employees unless there's an error"
   @spec get_employees(String.t()) ::
@@ -24,7 +27,7 @@ defmodule AnniversaryApp do
   Builds a supervisor map with up to 5 of the supervisors employees with upcoming anniversaries
   in order based on their anniversary date.
   """
-  @spec order_data(list(Employee.t()), Date.t()) :: map()
+  @spec order_data(list(Employee.t()), Date.t()) :: supervisor_map()
   def order_data(employees, %Date{} = run_date) do
     Enum.reduce(employees, %{}, fn employee, acc ->
       acc
@@ -37,4 +40,11 @@ defmodule AnniversaryApp do
       )
     end)
   end
+
+  @doc """
+  Creates a JSON formatted response matching the output requirements given a
+  supervisor map.
+  """
+  @spec build_response(supervisor_map()) :: String.t()
+  def build_response(supervisor_map), do: Response.build_response(supervisor_map)
 end

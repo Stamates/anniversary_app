@@ -5,7 +5,7 @@ defmodule AnniversaryApp.EmployeeTest do
 
   describe "maybe_add_employee/3" do
     test "adds employee to list if upcoming anniversary" do
-      assert [%Employee{hire_date: ~D[2010-02-01]}] =
+      assert [%Employee{anniversary_date: ~D[2015-02-01]}] =
                Employee.maybe_add_employee(
                  [],
                  %Employee{hire_date: ~D[2010-02-01]},
@@ -15,19 +15,19 @@ defmodule AnniversaryApp.EmployeeTest do
 
     test "adds employee to proper order in list and truncates to list limit" do
       list = [
-        %Employee{hire_date: ~D[2010-02-01]},
-        %Employee{hire_date: ~D[2000-03-11]},
-        %Employee{hire_date: ~D[2010-05-01]},
-        %Employee{hire_date: ~D[1995-07-21]},
-        %Employee{hire_date: ~D[2005-08-07]}
+        %Employee{anniversary_date: ~D[2015-02-01]},
+        %Employee{anniversary_date: ~D[2015-03-11]},
+        %Employee{anniversary_date: ~D[2015-05-01]},
+        %Employee{anniversary_date: ~D[2015-07-21]},
+        %Employee{anniversary_date: ~D[2015-08-07]}
       ]
 
       assert [
-               %Employee{hire_date: ~D[2010-02-01]},
-               %Employee{hire_date: ~D[2000-03-11]},
-               %Employee{hire_date: ~D[2010-04-03]},
-               %Employee{hire_date: ~D[2010-05-01]},
-               %Employee{hire_date: ~D[1995-07-21]}
+               %Employee{anniversary_date: ~D[2015-02-01]},
+               %Employee{anniversary_date: ~D[2015-03-11]},
+               %Employee{anniversary_date: ~D[2015-04-03]},
+               %Employee{anniversary_date: ~D[2015-05-01]},
+               %Employee{anniversary_date: ~D[2015-07-21]}
              ] =
                Employee.maybe_add_employee(
                  list,
@@ -38,19 +38,19 @@ defmodule AnniversaryApp.EmployeeTest do
 
     test "does NOT add employee if they are beyond the list limit" do
       list = [
-        %Employee{hire_date: ~D[2010-02-01]},
-        %Employee{hire_date: ~D[2000-03-11]},
-        %Employee{hire_date: ~D[2010-05-01]},
-        %Employee{hire_date: ~D[1995-07-21]},
-        %Employee{hire_date: ~D[2005-08-07]}
+        %Employee{anniversary_date: ~D[2015-02-01]},
+        %Employee{anniversary_date: ~D[2015-03-11]},
+        %Employee{anniversary_date: ~D[2015-05-01]},
+        %Employee{anniversary_date: ~D[2015-07-21]},
+        %Employee{anniversary_date: ~D[2015-08-07]}
       ]
 
       assert [
-               %Employee{hire_date: ~D[2010-02-01]},
-               %Employee{hire_date: ~D[2000-03-11]},
-               %Employee{hire_date: ~D[2010-05-01]},
-               %Employee{hire_date: ~D[1995-07-21]},
-               %Employee{hire_date: ~D[2005-08-07]}
+               %Employee{anniversary_date: ~D[2015-02-01]},
+               %Employee{anniversary_date: ~D[2015-03-11]},
+               %Employee{anniversary_date: ~D[2015-05-01]},
+               %Employee{anniversary_date: ~D[2015-07-21]},
+               %Employee{anniversary_date: ~D[2015-08-07]}
              ] =
                Employee.maybe_add_employee(
                  list,
@@ -91,6 +91,27 @@ defmodule AnniversaryApp.EmployeeTest do
                  %Employee{hire_date: ~D[2025-04-01]},
                  ~D[2015-02-01]
                )
+    end
+  end
+
+  describe "set_anniversary_date/2" do
+    setup ctx do
+      [employee: %Employee{anniversary_date: ctx[:anniversary_date], hire_date: ~D[2010-02-01]}]
+    end
+
+    test "sets the anniversary_date based on the hire_date with the run_date year", %{
+      employee: employee
+    } do
+      assert %Employee{anniversary_date: ~D[2015-02-01]} =
+               Employee.set_anniversary_date(employee, ~D[2015-01-11])
+    end
+
+    @tag anniversary_date: ~D[1990-02-01]
+    test "updates an existing anniversary_date", %{
+      employee: employee
+    } do
+      assert %Employee{anniversary_date: ~D[2015-02-01]} =
+               Employee.set_anniversary_date(employee, ~D[2015-01-11])
     end
   end
 

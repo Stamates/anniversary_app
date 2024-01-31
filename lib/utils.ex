@@ -5,7 +5,7 @@ defmodule AnniversaryApp.Utils do
 
   @doc "Determines if the first date is >= the second date based on the month and day only."
   @spec not_past_date?(Date.t(), Date.t()) :: boolean()
-  def not_past_date?(first_date, second_date) do
+  def not_past_date?(%Date{} = first_date, %Date{} = second_date) do
     first_date
     |> Map.put(:year, year(second_date))
     |> Date.compare(second_date)
@@ -13,15 +13,6 @@ defmodule AnniversaryApp.Utils do
       :eq -> true
       :gt -> true
       _ -> false
-    end
-  end
-
-  @doc "Converst the input date string to a Date.t() if possible."
-  @spec convert_to_date(String.t()) :: {:ok, Date.t()} | {:error, atom()}
-  def convert_to_date(date_string) do
-    case Date.from_iso8601(date_string) do
-      {:ok, date} -> {:ok, date}
-      {:error, reason} -> {:error, reason}
     end
   end
 

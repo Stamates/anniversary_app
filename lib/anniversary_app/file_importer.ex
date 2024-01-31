@@ -65,8 +65,8 @@ defmodule AnniversaryApp.FileImporter do
     header_row
     |> Enum.zip(data)
     |> Enum.into(%{})
-    |> validate_map()
     |> sanitize_data()
+    |> validate_map()
     |> convert_to_struct(index)
   end
 
@@ -84,16 +84,16 @@ defmodule AnniversaryApp.FileImporter do
     _ -> "Invalid hire date provided"
   end
 
-  defp sanitize_data(error), do: error
-
-  defp validate_map(employee_map) do
-    if employee_map |> Map.keys() |> length() ==
+  defp validate_map(%{} = employee_map) do
+    if employee_map |> Map.put(:anniversary_date, nil) |> Map.keys() |> length() ==
          %Employee{} |> Map.delete(:__struct__) |> Map.keys() |> length() do
       employee_map
     else
       "Row is missing data"
     end
   end
+
+  defp validate_map(error), do: error
 
   defp verify_valid_import([{:ok, headers} | _employees] = data) when is_list(headers), do: data
   defp verify_valid_import(_), do: [{:error, "File must be a valid CSV file"}]

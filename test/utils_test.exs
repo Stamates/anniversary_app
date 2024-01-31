@@ -4,12 +4,16 @@ defmodule AnniversaryApp.UtilsTest do
   alias AnniversaryApp.Utils
 
   describe "not_past_date?/2" do
-    test "returns true if first date is >= the month/day of the second date" do
-      assert Utils.not_past_date?(~D[2010-02-01], ~D[2000-02-01])
+    test "returns true if first date is = the second date" do
+      assert Utils.not_past_date?(~D[2010-02-01], ~D[2010-02-01])
     end
 
-    test "returns false if first date is <>=> the month/day of the second date" do
-      refute Utils.not_past_date?(~D[2010-01-01], ~D[2000-02-01])
+    test "returns true if first date is > the second date" do
+      assert Utils.not_past_date?(~D[2010-02-02], ~D[2010-02-01])
+    end
+
+    test "returns false if first date is < the month/day of the second date" do
+      refute Utils.not_past_date?(~D[2010-01-01], ~D[2010-02-01])
     end
   end
 
