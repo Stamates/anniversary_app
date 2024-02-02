@@ -38,25 +38,27 @@ defmodule Mix.Tasks.Anniversary do
   use Mix.Task
 
   alias AnniversaryApp
+  alias AnniversaryApp.CurrentTime
 
-  def run([input_file]), do: run([input_file, Date.utc_today() |> Date.to_iso8601()])
+  @doc """
+  Parses an employee CSV file and produces a supervisor list with any emplyees
+  with an upcoming anniversary
+  """
+  @impl Mix.Task
+  def run([input_file]), do: run([input_file, CurrentTime.utc_today() |> Date.to_iso8601()])
 
   def run([input_file, run_date]) do
-    Mix.Task.run("app.start")
-
     with {:ok, run_date} <- Date.from_iso8601(run_date),
          {:ok, employees} <- AnniversaryApp.get_employees(input_file) do
       employees
       |> AnniversaryApp.order_data(run_date)
-
-      # Build JSON response
+      |> AnniversaryApp.build_response()
+      |> Jason.encode_to_iodata!()
+      |> Jason.Formatter.pretty_print()
+      |> IO.puts()
     else
       {:error, errors} -> handle_errors(errors)
     end
-
-    # Sort and filter for upcoming anniversaries
-    # Build and return JSON payload
-    # Handle error messages with invalid input parameters
   end
 
   def run(_args),

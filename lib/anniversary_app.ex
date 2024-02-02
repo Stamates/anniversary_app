@@ -10,6 +10,13 @@ defmodule AnniversaryApp do
 
   @type supervisor_map :: %{String.t() => list(Employee.t())}
 
+  @doc """
+  Creates a response payload matching the output requirements given a
+  supervisor map.
+  """
+  @spec build_response(supervisor_map()) :: list(map())
+  def build_response(supervisor_map), do: Response.build(supervisor_map)
+
   @doc "Converts a CSV input file into a list of Employees unless there's an error"
   @spec get_employees(String.t()) ::
           {:ok, list(Employee.t())} | {:error, list(map() | String.t())}
@@ -40,11 +47,4 @@ defmodule AnniversaryApp do
       )
     end)
   end
-
-  @doc """
-  Creates a JSON formatted response matching the output requirements given a
-  supervisor map.
-  """
-  @spec build_response(supervisor_map()) :: String.t()
-  def build_response(supervisor_map), do: Response.build_response(supervisor_map)
 end

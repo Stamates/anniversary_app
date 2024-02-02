@@ -1,22 +1,82 @@
 defmodule Mix.Tasks.AnniversaryTest do
   use ExUnit.Case
 
+  alias AnniversaryApp.CurrentTimeMock
   alias Mix.Tasks.Anniversary
 
-  @current_date ""
-
-  setup do
-    # Mock setup for current date
-    :ok
-  end
+  @current_date ~D[2020-01-01]
 
   describe "run" do
     test "returns the expected result based on the current date" do
-      assert response = Anniversary.run(["./test/test_import.csv"])
+      CurrentTimeMock.update(@current_date)
+
+      assert """
+             [
+               {
+                 \"supervisor_id\": \"ballison200\",
+                 \"upcoming_milestones\": [
+                   {
+                     \"employee_id\": \"sfrost205\",
+                     \"anniversary_date\": \"2020-01-29\"
+                   }
+                 ]
+               },
+               {
+                 \"supervisor_id\": \"lconrad254\",
+                 \"upcoming_milestones\": []
+               },
+               {
+                 \"supervisor_id\": \"sfrost205\",
+                 \"upcoming_milestones\": []
+               },
+               {
+                 \"supervisor_id\": \"tbriggs201\",
+                 \"upcoming_milestones\": []
+               },
+               {
+                 \"supervisor_id\": \"wlee257\",
+                 \"upcoming_milestones\": []
+               }
+             ]
+             """ ==
+               ExUnit.CaptureIO.capture_io(fn ->
+                 Anniversary.run(["./test/test_import.csv"])
+               end)
     end
 
     test "returns the expected result based on an input run_date" do
-      assert response = Anniversary.run(["./test/test_import.csv", "2015-10-01"])
+      assert """
+             [
+               {
+                 \"supervisor_id\": \"ballison200\",
+                 \"upcoming_milestones\": [
+                   {
+                     \"employee_id\": \"sfrost205\",
+                     \"anniversary_date\": \"2020-01-29\"
+                   }
+                 ]
+               },
+               {
+                 \"supervisor_id\": \"lconrad254\",
+                 \"upcoming_milestones\": []
+               },
+               {
+                 \"supervisor_id\": \"sfrost205\",
+                 \"upcoming_milestones\": []
+               },
+               {
+                 \"supervisor_id\": \"tbriggs201\",
+                 \"upcoming_milestones\": []
+               },
+               {
+                 \"supervisor_id\": \"wlee257\",
+                 \"upcoming_milestones\": []
+               }
+             ]
+             """ ==
+               ExUnit.CaptureIO.capture_io(fn ->
+                 Anniversary.run(["./test/test_import.csv", "2020-01-01"])
+               end)
     end
 
     test "returns error if invalid inputs" do
